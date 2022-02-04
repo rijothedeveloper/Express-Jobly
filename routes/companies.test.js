@@ -106,6 +106,21 @@ describe("GET /companies", function () {
         .set("authorization", `Bearer ${u1Token}`);
     expect(resp.statusCode).toEqual(500);
   });
+  
+  test("GET /companies with name filtering", async ()=>{
+    const resp = await request(app).get("/companies?name=C3")
+    expect(resp.body).toEqual({
+      companies:
+          [{
+              handle: "c3",
+              name: "C3",
+              description: "Desc3",
+              numEmployees: 3,
+              logoUrl: "http://c3.img",
+    }
+  ]})
+  });
+
 });
 
 /************************************** GET /companies/:handle */
