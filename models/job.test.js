@@ -31,13 +31,9 @@ describe("create job", function() {
     test("works create company", async() => {
         const job = await Job.create(newJob)
         expect(job).toEqual(newJob)
-        const result = await db.query(`
-            SELECT title from jobs WHERE name = ${newJob.title}
-        `)
+        const result = await db.query(`SELECT title from jobs WHERE title = '${newJob.title}'`)
         expect(result.rows).toEqual([
-            {
-                title: "app developer"
-            }
+           { "title": "app developer" }
         ])
     })
     
