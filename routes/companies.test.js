@@ -11,6 +11,7 @@ const {
   commonAfterEach,
   commonAfterAll,
   u1Token,
+  u2Token
 } = require("./_testCommon");
 
 beforeAll(commonBeforeAll);
@@ -217,6 +218,20 @@ describe("PATCH /companies/:handle", function () {
         .set("authorization", `Bearer ${u1Token}`);
     expect(resp.statusCode).toEqual(400);
   });
+  test("only admin can update a company", async function () {
+    const resp = await request(app)
+        .patch(`/companies/c1`)
+        .send({
+          name: "C1-new",
+        })
+        .set("authorization", `Bearer ${u2Token}`);
+    expect(resp.body).toEqual({
+      error: {
+        "message": "Unauthorized",
+        "status": 401,
+      },
+    });
+  });
 });
 
 /************************************** DELETE /companies/:handle */
@@ -227,6 +242,18 @@ describe("DELETE /companies/:handle", function () {
         .delete(`/companies/c1`)
         .set("authorization", `Bearer ${u1Token}`);
     expect(resp.body).toEqual({ deleted: "c1" });
+  });
+
+  test("works for users", async function () {
+    const resp = await request(app)
+        .delete(`/companies/c1`)
+        .set("authorization", `Bearer ${u2Token}`);
+    expect(resp.body).toEqual({ 
+      error: {
+        "message": "Unauthorized",
+        "status": 401,
+      },
+     });
   });
 
   test("unauth for anon", async function () {
