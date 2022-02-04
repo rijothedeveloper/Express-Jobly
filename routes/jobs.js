@@ -4,7 +4,7 @@ const express = require("express");
 const { ensureLoggedIn, ensureAdmin } = require("../middleware/auth");
 
 const router = new express.Router();
-const jobNewSchema = ("../schemas/jobNew.json")
+const jobNewSchema = require ("../schemas/jobNew.json")
 
 
 router.post("/", ensureLoggedIn, async function (req, res, next) {
