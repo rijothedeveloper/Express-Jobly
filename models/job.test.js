@@ -24,7 +24,7 @@ afterAll(commonAfterAll);
 describe("create job", function() {
     const newJob = {
         "title": "app developer", 
-        "salary": "1000", 
+        "salary": 1000, 
         "equity":"0.2", 
         "company": "c1"
     }
