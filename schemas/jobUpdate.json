@@ -14,10 +14,7 @@
         }
     ],
     "required": [
-        "title",
-        "salary",
-        "equity",
-        "company"
+        
     ],
     "properties": {
         "title": {

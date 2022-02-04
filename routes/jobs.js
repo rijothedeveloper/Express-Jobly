@@ -5,6 +5,7 @@ const { ensureLoggedIn, ensureAdmin } = require("../middleware/auth");
 
 const router = new express.Router();
 const jobNewSchema = require ("../schemas/jobNew.json")
+const jobUpdateSchema = require("../schemas/jobUpdate.json")
 
 
 router.post("/", ensureLoggedIn, async function (req, res, next) {
@@ -19,6 +20,32 @@ router.post("/", ensureLoggedIn, async function (req, res, next) {
       return res.status(201).json({ job });
     } catch (err) {
       return next(err);
+    }
+  });
+
+  router.patch("/:title", ensureLoggedIn, async function (req, res, next) {
+    try {
+      const validator = jsonschema.validate(req.body, jobUpdateSchema);
+      if (!validator.valid) {
+        const errs = validator.errors.map(e => e.stack);
+        throw new BadRequestError(errs);
+      }
+      
+      const title = req.params.title
+      const job = await Job.update(title, req.body);
+      return res.json({ job });
+    } catch (err) {
+      return next(err);
+    }
+  });
+
+  router.delete("/:title", ensureLoggedIn, async function (req, res, next) {
+    try{
+      const title = req.params.title
+      const result = await Job.delete(title);
+      return res.json({ deleted: req.params.title })
+    } catch (err) {
+      next (err)
     }
   });
 

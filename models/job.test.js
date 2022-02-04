@@ -36,5 +36,38 @@ describe("create job", function() {
            { "title": "app developer" }
         ])
     })
+
+    describe("update job", () => {
+      const job = {
+        "company": "c2"
+    }
+      test("work: update a job", async () => {
+        const handle = "job3";
+        const updatedJob = await Job.update(handle, job);
+        expect(job.company).toEqual(updatedJob.company)
+        const result = await db.query(`SELECT company_handle AS company from jobs WHERE title = '${handle}'`)
+        expect(result.rows).toEqual([
+           { "company": "c2" }
+        ])
+      })
+    })
+
+    describe("delete", function () {
+      test("works", async function () {
+        await Job.delete("job1");
+        const res = await db.query(
+            "SELECT title FROM jobs WHERE title='job1'");
+        expect(res.rows.length).toEqual(0);
+      });
+    
+      test("not found if no such company", async function () {
+        try {
+          await Job.delete("nope");
+          fail();
+        } catch (err) {
+          expect(err instanceof NotFoundError).toBeTruthy();
+        }
+      });
+    });
     
 })

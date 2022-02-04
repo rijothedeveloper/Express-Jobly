@@ -1,5 +1,9 @@
+"use strict";
+
 const db = require("../db")
 const { BadRequestError, NotFoundError } = require("../expressError");
+const { update } = require("./company");
+const { sqlForPartialUpdate } = require("../helpers/sql");
 
 class Job {
     static async create(job) {
@@ -13,6 +17,32 @@ class Job {
             [job.title, job.salary, job.equity, job.company]);
         return results.rows[0];
     }
+
+    static async update(title, data) {
+        const { setCols, values } = sqlForPartialUpdate(data, {
+            company: "company_handle",
+          });
+          const handleVarIdx = "$" + (values.length + 1);
+          const querySql = `UPDATE jobs 
+          SET ${setCols} 
+          WHERE title = ${handleVarIdx} 
+          RETURNING title, 
+                    salary, 
+                    equity, 
+                    company_handle AS company;`;
+        const results = await db.query(querySql, [...values, title]);
+        const updatedJob = results.rows[0]
+        return updatedJob;
+    }
+
+    static async delete(title) {
+        const results = await db.query(`
+        DELETE from jobs WHERE title = $1 `, [title]);
+        if (results.rowCount === 0) 
+        throw new NotFoundError(`No job: ${title}`);
+    }
 }
+
+
 
 module.exports = Job
