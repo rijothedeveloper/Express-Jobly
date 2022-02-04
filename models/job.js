@@ -9,7 +9,7 @@ class Job {
         }
         const results = await db.query(`
             INSERT INTO jobs (title, salary, equity, company_handle)
-            values($1, $2, $3, $4) returning title, salary, equity, company_handle`,
+            values($1, $2, $3, $4) returning title, salary, equity, company_handle AS company`,
             [job.title, job.salary, job.equity, job.company]);
         return results.rows[0];
     }
