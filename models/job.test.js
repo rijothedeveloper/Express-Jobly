@@ -37,6 +37,33 @@ describe("create job", function() {
         ])
     })
 
+    describe("Get jobs", ()=> {
+      test("get all jobs", async () => {
+        const jobs = await Job.get()
+        expect(jobs).toEqual([
+          {
+             "company_handle": "c1",
+             "equity": "1",
+             "salary": 1000,
+             "title": "job1",
+            },
+            {
+              "company_handle": "c1",
+              "equity": "1",
+              "salary": 1000,
+              "title": "job2",
+             },
+             {
+              "company_handle": "c3",
+              "equity": "1",
+              "salary": 1000,
+              "title": "job3",
+             },
+
+        ])
+      })
+    })
+
     describe("update job", () => {
       const job = {
         "company": "c2"

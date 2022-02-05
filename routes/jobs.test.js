@@ -19,6 +19,22 @@ beforeEach(commonBeforeEach);
 afterEach(commonAfterEach);
 afterAll(commonAfterAll);
 
+describe("GET jobs", ()=>{
+    const jobs = [{
+        "title": "app_developer", 
+        "salary": 1000, 
+        "equity":"0.2", 
+        "company": "c1"
+       },
+       ]
+    test("works get jobs", async () => {
+        const resp = await request(app)
+        .get("/jobs")
+        expect(resp.statusCode).toEqual(200);
+        expect(resp.body).toEqual({jobs: jobs})
+    })
+})
+
 /************************************** POST /jobs */
 describe("POST /jobs", function () {
     const newJob = {

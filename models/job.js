@@ -18,6 +18,14 @@ class Job {
         return results.rows[0];
     }
 
+    static async get() {
+        const results = await db.query(`
+        SELECT title, salary, equity, company_handle AS company
+        FROM jobs `,
+        );
+        return results.rows;
+    }
+
     static async update(title, data) {
         const { setCols, values } = sqlForPartialUpdate(data, {
             company: "company_handle",

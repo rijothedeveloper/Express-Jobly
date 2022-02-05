@@ -7,6 +7,10 @@ const router = new express.Router();
 const jobNewSchema = require ("../schemas/jobNew.json")
 const jobUpdateSchema = require("../schemas/jobUpdate.json")
 
+router.get("/", async (req, res, next) => {
+  const jobs = await Job.get()
+  return res.json({jobs: jobs})
+})
 
 router.post("/", ensureLoggedIn, async function (req, res, next) {
     try {
