@@ -144,7 +144,7 @@ class User {
       where username = '${user.username}'`
     )
     if (jobsResult.rowCount !== 0) {
-      user.applied = jobsResult.rows;
+      user.jobs = jobsResult.rows.map(e => e.job_id);
     }
     
     return user;
