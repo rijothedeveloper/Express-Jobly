@@ -42,19 +42,43 @@ describe("create job", function() {
         const jobs = await Job.get()
         expect(jobs).toEqual([
           {
-             "company_handle": "c1",
+             "company": "c1",
              "equity": "1",
              "salary": 1000,
              "title": "job1",
             },
             {
-              "company_handle": "c1",
+              "company": "c1",
               "equity": "1",
               "salary": 1000,
               "title": "job2",
              },
              {
-              "company_handle": "c3",
+              "company": "c3",
+              "equity": "1",
+              "salary": 1000,
+              "title": "job3",
+             },
+
+        ])
+      })
+      test("get with title filter", async () => {
+        const jobs = await Job.get("job", null, null);
+        expect(jobs).toEqual([
+          {
+             "company": "c1",
+             "equity": "1",
+             "salary": 1000,
+             "title": "job1",
+            },
+            {
+              "company": "c1",
+              "equity": "1",
+              "salary": 1000,
+              "title": "job2",
+             },
+             {
+              "company": "c3",
               "equity": "1",
               "salary": 1000,
               "title": "job3",
@@ -63,6 +87,8 @@ describe("create job", function() {
         ])
       })
     })
+
+
 
     describe("update job", () => {
       const job = {

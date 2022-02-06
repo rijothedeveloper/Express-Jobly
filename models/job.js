@@ -18,11 +18,29 @@ class Job {
         return results.rows[0];
     }
 
-    static async get() {
-        const results = await db.query(`
-        SELECT title, salary, equity, company_handle AS company
-        FROM jobs `,
-        );
+    static async get(title, minSalary, hasEquity ) {
+        let whereClause = false
+        let query = `SELECT title, salary, equity, company_handle AS company FROM jobs `;
+        if (title) {
+            query = query + ` where title LIKE '${title}%'`
+            whereClause = true
+        }
+        if (minSalary) {
+            if (whereClause){
+                query = query + ` and salary > ${minSalary}`
+            } else {
+                query = query + ` where salary > ${minSalary}`
+            }
+        }
+        if(hasEquity) {
+            if(whereClause) {
+                query = query + ' and equity > 0'
+            } else {
+                query = query + ' where equity > 0'
+            }
+        }
+
+        const results = await db.query(query);
         return results.rows;
     }
 

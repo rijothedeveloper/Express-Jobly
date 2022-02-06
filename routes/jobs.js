@@ -8,7 +8,10 @@ const jobNewSchema = require ("../schemas/jobNew.json")
 const jobUpdateSchema = require("../schemas/jobUpdate.json")
 
 router.get("/", async (req, res, next) => {
-  const jobs = await Job.get()
+  const title = req.body.title;
+  const minSalary = req.body.minSalary;
+  const hasEquity = req.body.hasEquity;
+  const jobs = await Job.get(title, minSalary, hasEquity)
   return res.json({jobs: jobs})
 })
 

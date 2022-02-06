@@ -117,5 +117,16 @@ router.delete("/:username", ensureAdminOrSameUser, async function (req, res, nex
   }
 });
 
+router.post("/:username/jobs/:id",  async function (req, res, next) {
+  try {
+    const userName = req.params.username;
+    const jobId = req.params.id;
+    const result = await User.applyJob(userName, jobId)
+    return res.json({"applied": result})
+  } catch (err) {
+    return next(err)
+  }
+})
+
 
 module.exports = router;
